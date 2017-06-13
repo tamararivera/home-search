@@ -64,9 +64,11 @@ function getDataFromZillow(element) {
             } else {
                 if(!result.response.results.result.length){
                     element.unitsAvailable = 1;
+                    element.zillowLink = result.response.results.result.links.homedetails;
                 }
                 else{
                     element.unitsAvailable = result.response.results.result.length;
+                    element.zillowLink = result.response.results.result[0].links.homedetails
                 }
             }
         });
