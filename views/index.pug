@@ -2,9 +2,10 @@ extends layout
 
 block content
   section
-    form
-      input(type='text', id='searchText')
-      button(id='searchButton') Search
+    form(class='form-inline')
+      div(class='form-group')
+        input(type='text', id='searchText', class='form-control')
+      button(id='searchButton', class='btn btn-default') Search
       
 block append scripts
   script(src='/javascripts/index.js')

@@ -8,72 +8,86 @@ const yelp = require('yelp-fusion');
 var parser = new xml2js.Parser({explicitArray: false, explicitRoot: false});
 var yelpToken;
 
-router.post('/', function(req, res, next) {
+router.post('/', function (req, res, next) {
+  req.checkBody('location', 'Location is required').notEmpty();
+
+  req.sanitize('location').escape();
+  req.sanitize('location').trim();
+
+  var errors = req.validationErrors();
+
+  if (!errors) {
     var location = req.body.location;
     var yelpResults;
     //I have to call the accessToken function only when necessary
     yelp.accessToken(process.env.YELP_ID, process.env.YELP_SECRET)
-        .then(response => {
-            const client = yelp.client(response.jsonBody.access_token);
+      .then(response => {
+        const client = yelp.client(response.jsonBody.access_token);
 
-            client.search({
-                location: location,
-                categories: 'apartments,condominiums'
-            }).then(response => {
+        client.search({
+          location: location,
+          categories: 'apartments,condominiums'
+        }).then(response => {
 
-                yelpResults = response.jsonBody.businesses;
+          yelpResults = response.jsonBody.businesses;
 
-                let map = yelpResults.map(result => {
-                    return getDataFromZillow(result);
-                });
+          let map = yelpResults.map(result => {
+            return getDataFromZillow(result);
+          });
 
-                return Promise.all(map).then(function (result) {
-                    res.send(result.filter(function(x) {return x.unitsAvailable}));
-                });
+          return Promise.all(map).then(function (result) {
+            res.send(result.filter(function (x) {
+              return x.unitsAvailable
+            }));
+          });
 
-            });
-        }).catch(e => {
-        console.log(e);
+        });
+      }).catch(e => {
+      console.log(e);
     });
+  } else {
+    res.send([]);
+  }
+
 });
 
 function shouldRetry(error, response, body) {
-    var retry = false;
-    parser.parseString(body, function(err, result) {
-        retry = !!err;
-    });
-    return retry;
+  var retry = false;
+  parser.parseString(body, function (err, result) {
+    retry = !!err;
+  });
+  return retry;
 }
 
 function getDataFromZillow(element) {
 
-    return request.get({
-        url: 'http://www.zillow.com/webservice/GetSearchResults.htm',
-        qs: {
-            'zws-id': process.env.ZILLOW_KEY,
-            address: element.location.address1,
-            citystatezip: element.location.zip_code
-        },
-        retryStrategy: shouldRetry
-    }).then( function (response) {
+  return request.get({
+    url: 'http://www.zillow.com/webservice/GetSearchResults.htm',
+    qs: {
+      'zws-id': process.env.ZILLOW_KEY,
+      address: element.location.address1,
+      citystatezip: element.location.zip_code
+    },
+    retryStrategy: shouldRetry
+  }).then(function (response) {
 
-        let body = response.body;
-        parser.parseString(body, function (err, result) {
-            if(err || !result.response){
-                element.rejected = true;
-            } else {
-                if(!result.response.results.result.length){
-                    element.unitsAvailable = 1;
-                    element.zillowLink = result.response.results.result.links.homedetails;
-                }
-                else{
-                    element.unitsAvailable = result.response.results.result.length;
-                    element.zillowLink = result.response.results.result[0].links.homedetails
-                }
-            }
-        });
-        return element;
+    let body = response.body;
+    parser.parseString(body, function (err, result) {
+      if (err || !result.response) {
+        element.rejected = true;
+      } else {
+        if (!result.response.results.result.length) {
+          element.unitsAvailable = 1;
+          element.zillowLink = result.response.results.result.links.homedetails;
+        }
+        else {
+          element.unitsAvailable = result.response.results.result.length;
+          element.zillowLink = result.response.results.result[0].links.homedetails
+        }
+      }
     });
+    return element;
+  });
 
 }
 
