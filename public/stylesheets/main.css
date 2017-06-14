@@ -1,0 +1,16 @@
+html, body, main, #mapSection, #mapSection .row, #mapSection [class^="col-"] {
+    height:100%;
+}
+
+.row {
+    margin-bottom: 1rem;
+}
+
+.form-inline .form-control {
+    margin-right: 0.5rem;
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}

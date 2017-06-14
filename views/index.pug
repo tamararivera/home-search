@@ -2,10 +2,20 @@ extends layout
 
 block content
   section
-    form(class='form-inline')
-      div(class='form-group')
-        input(type='text', id='searchText', class='form-control')
-      button(id='searchButton', class='btn btn-default') Search
-      
+    div(class='row')
+      div(class='col-xs-12')
+        form(class='form-inline')
+          div(class='form-group')
+            label(class='sr-only', for='searchText') Enter an address or zip code
+            input(type='text', id='searchText', class='form-control', placeholder='Enter an address or zip code')
+          button(id='searchButton', class='btn btn-default') Search
+
+  section(id='mapSection')
+    div(class='row')
+      div(class='col-sm-8')
+        div(id='map')
+      div(class='col-sm-4')
+        div(id='listResults')
 block append scripts
+  script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBNT3QFuwAljAQB2HbfIEAmGfDpJAy7vzg')
   script(src='/javascripts/index.js')
