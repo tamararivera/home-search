@@ -10,6 +10,14 @@ html, body, main, #mapSection, #mapSection .row, #mapSection [class^="col-"] {
     margin-right: 0.5rem;
 }
 
+.yelp-rating{
+    width: 50%;
+}
+
+.yelp-logo {
+    width: 30%;
+}
+
 #map {
     height: 100%;
     width: 100%;
