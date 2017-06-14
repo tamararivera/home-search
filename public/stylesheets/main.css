@@ -1,7 +1,20 @@
-html, body, main, #mapSection, #mapSection .row, #mapSection [class^="col-"] {
-    height:100%;
+html, body, #mapSection, #mapSection .row, #mapSection [class^="col-"] {
+    height: 95%;
 }
 
+body {
+    display: flex;
+    flex-flow: column;
+}
+
+main {
+    width:100%;
+    height: 100%;
+}
+
+footer {
+    margin-top: auto;
+}
 .row {
     margin-bottom: 1rem;
 }
@@ -20,5 +33,5 @@ html, body, main, #mapSection, #mapSection .row, #mapSection [class^="col-"] {
 
 #map {
     height: 100%;
-    width: 100%;
+    width: 90%;
 }
