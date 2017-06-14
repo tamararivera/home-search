@@ -1,17 +1,21 @@
 /* globals $*/
 $('#searchButton').on('click', function (event) {
   var formLocation = $('#searchText').val();
-  if (formLocation) {
-    $.ajax('/search', {
-      method: 'post',
-      data: {
-        location: formLocation
-      },
-      success: function (data) {
-        console.log(data);
-      },
-      error: logAjaxError
-    });
+  var results = (localStorage['HomeSearchTestResults'])? JSON.parse(localStorage['HomeSearchTestResults']) : [];
+  if (!localStorage['HomeSearchTestResults']) {
+    if (formLocation) {
+      $.ajax('/search', {
+        method: 'post',
+        data: {
+          location: formLocation
+        },
+        success: function (data) {
+          results = data;
+          localStorage['HomeSearchTestResults'] = JSON.stringify(results);
+        },
+        error: logAjaxError
+      });
+    }
   }
   event.preventDefault();
 });
