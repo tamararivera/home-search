@@ -11,7 +11,7 @@ $('#searchButton').on('click', function (event) {
           location: formLocation
         },
         success: function (data) {
-          populateMap(data);
+          showResults(data);
           results = data;
           localStorage['HomeSearchTestResults'] = JSON.stringify(results);
         },
@@ -19,13 +19,31 @@ $('#searchButton').on('click', function (event) {
       });
     }
   } else {
-    populateMap(results);
+    showResults(results);
   }
   event.preventDefault();
 });
 
 function logAjaxError(jqXHR, textStatus, errorThrown) {
   console.log('AJAX error. Status:', textStatus, 'error:', errorThrown);
+}
+
+function showResults(data) {
+  populateList(data);
+  populateMap(data);
+}
+
+
+function populateList(data) {
+  var list = $('#listResults');
+  list.empty();
+  data.forEach(function (element, index, array) {
+    var item = $('<div class="panel panel-default"><div class="panel-body"><h4>'+ element.name +'</h4><div><img class="yelp-rating" src="/images/yelp/'+ element.rating
+      +'.png"><a target="_blank" href="'+ element.url +'"><img class="yelp-logo" src="/images/yelp/logo.png"></a><p>Based on '
+      + element.review_count + ' reviews</p><a href="' + element.zillowLink + '" target="_blank">'
+      + element.unitsAvailable + ' available units on Zillow</a></div></div></div>');
+    list.append(item);
+  })
 }
 
 function makeItFit(markers) {
@@ -53,7 +71,7 @@ function populateMap(data) {
 
     var markerInfo = '<h4>'+ element.name +'</h4><div><img class="yelp-rating" src="/images/yelp/'+ element.rating
       +'.png"><a target="_blank" href="'+ element.url +'"><img class="yelp-logo" src="/images/yelp/logo.png"></a><p>Based on '
-      + element.review_count + ' reviews</p><a href="' + element.zillowLink + '">'
+      + element.review_count + ' reviews</p><a href="' + element.zillowLink + '" target="_blank">'
       + element.unitsAvailable + ' available units on Zillow</a></div>';
     var infowindow = new google.maps.InfoWindow({
       content: markerInfo,

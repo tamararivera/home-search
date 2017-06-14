@@ -31,7 +31,11 @@ footer {
     width: 30%;
 }
 
+.scroll {
+    overflow: scroll;
+}
+
 #map {
     height: 100%;
-    width: 90%;
+    width: 100%;
 }
