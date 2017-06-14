@@ -28,17 +28,14 @@ function logAjaxError(jqXHR, textStatus, errorThrown) {
   console.log('AJAX error. Status:', textStatus, 'error:', errorThrown);
 }
 
-function setCenter(data) {
-  var lat = 0;
-  var lng = 0;
-  data.forEach(function (element, index, array) {
-    lat += element.coordinates.latitude;
-    lng += element.coordinates.longitude;
+function makeItFit(markers) {
+  var bounds = new google.maps.LatLngBounds();
+  markers.forEach(function (element) {
+    bounds.extend(element.getPosition());
   });
 
-  lat = lat / data.length;
-  lng = lng / data.length;
-  map.setCenter( { lat: lat, lng: lng });
+  map.fitBounds(bounds);
+  map.setZoom(map.getZoom()-1);
 }
 
 function populateMap(data) {
@@ -47,7 +44,8 @@ function populateMap(data) {
     map.setZoom( 16 );
   }
 
-  setCenter(data);
+  var markers = [];
+
   data.forEach(function (element, index, array) {
     var marker = new google.maps.Marker({
       position: { lat: element.coordinates.latitude, lng: element.coordinates.longitude }});
@@ -65,6 +63,9 @@ function populateMap(data) {
     marker.addListener('click', function() {
       infowindow.open(map, marker);
     });
-  })
+    markers.push(marker);
+  });
+
+  makeItFit(markers);
 
 }
