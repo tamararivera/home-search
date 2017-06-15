@@ -7,7 +7,7 @@ $('#searchButton').on('click', function (event) {
   if (formLocation) {
     $('.form-group span').remove();
     $('.form-group').removeClass('has-error');
-    
+
     if (!localStorage['HomeSearchTestResults']) {
       $.ajax('/search', {
         method: 'post',
