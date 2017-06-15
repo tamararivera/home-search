@@ -24,6 +24,10 @@ footer {
     width: 100%;
 }
 
+.form-control-feedback {
+    text-align: start;
+}
+
 .yelp-rating{
     width: 50%;
 }
