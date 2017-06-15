@@ -37,13 +37,13 @@ router.post('/', function (req, res, next) {
 
           return Promise.all(map).then(function (result) {
             res.send(result.filter(function (x) {
-              return x.unitsAvailable
+              return x.unitsAvailable && x.categories.length == 1
             }));
           });
 
         });
       }).catch(e => {
-      console.log(e);
+        console.log(e);
     });
   } else {
     res.send([]);
