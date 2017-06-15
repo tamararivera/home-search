@@ -3,8 +3,12 @@ var map;
 $('#searchButton').on('click', function (event) {
   var formLocation = $('#searchText').val();
   var results = (localStorage['HomeSearchTestResults'])? JSON.parse(localStorage['HomeSearchTestResults']) : [];
-  if (!localStorage['HomeSearchTestResults']) {
-    if (formLocation) {
+
+  if (formLocation) {
+    $('.form-group span').remove();
+    $('.form-group').removeClass('has-error');
+    
+    if (!localStorage['HomeSearchTestResults']) {
       $.ajax('/search', {
         method: 'post',
         data: {
@@ -17,10 +21,15 @@ $('#searchButton').on('click', function (event) {
         },
         error: logAjaxError
       });
+    } else {
+      showResults(results);
     }
   } else {
-    showResults(results);
+    $('.form-group').addClass('has-error');
+    $('.form-group').append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span id="inputError2Status" class="sr-only">(error)</span>');
   }
+
+
   event.preventDefault();
 });
 
