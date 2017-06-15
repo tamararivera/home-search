@@ -4,6 +4,10 @@ $('#searchButton').on('click', function (event) {
   var formLocation = $('#searchText').val();
 
   if (formLocation) {
+    $('#searchButton').prop('disabled', true);
+    $('#mapSection').addClass('hidden');
+    $('#loading i').removeClass('hidden');
+
     $('.form-group span').remove();
     $('.form-group').removeClass('has-error');
 
@@ -13,9 +17,14 @@ $('#searchButton').on('click', function (event) {
         location: formLocation
       },
       success: function (data) {
+        $('#mapSection').removeClass('hidden');
         showResults(data);
       },
-      error: logAjaxError
+      error: logAjaxError,
+      complete: function (jqXHR, textStatus) {
+        $('#searchButton').prop('disabled', false);
+        $('#loading i').addClass('hidden');
+      }
     });
 
   } else {

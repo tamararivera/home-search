@@ -16,6 +16,11 @@ block content
         div(id='mapDiv')
       div(class='col-sm-4 scroll')
         div(id='listResults')
+  section(id='loading')
+    i(class='fa fa-refresh fa-spin fa-3x fa-fw center-block hidden')
+    span(class='sr-only') Loading...
+
 block append scripts
+  script(src='https://use.fontawesome.com/728dc040fb.js')
   script(src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBNT3QFuwAljAQB2HbfIEAmGfDpJAy7vzg')
   script(src='/javascripts/index.js')
