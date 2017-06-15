@@ -23,7 +23,7 @@ $('#searchButton').on('click', function (event) {
     $('.form-group').append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>'
       +'<span id="inputError2Status" class="sr-only">(error)</span>');
   }
-  
+
   event.preventDefault();
 });
 
@@ -61,7 +61,7 @@ function makeItFit(markers) {
 
 function populateMap(data) {
   if (!map) {
-    map = new google.maps.Map( $('#map')[0] );
+    map = new google.maps.Map( $('#mapDiv')[0] );
     map.setZoom( 16 );
   }
 
